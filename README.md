@@ -1,7 +1,7 @@
-#老马历写记--文本手术刀(lm-txtopr)
+# 老马历写记--文本手术刀(lm-txtopr)
 ![主界面](https://raw.githubusercontent.com/zongtong2046/lm-txtopr/master/snapshot/framemain.png)
 
-输入库说明：
+输入框说明：
 - 选择文件夹：点击右侧...按钮选择文件夹，也可以输入文件夹路径；文本查找和替换都基于该文件夹
 - 文件过滤符：*.jsp,*.js表示所有jsp和js文件
 - 查找字符串：目前只支持行内查找，且不支持正则表达式；
