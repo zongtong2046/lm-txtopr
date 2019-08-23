@@ -16,7 +16,7 @@ import cn.lmlxj.txtopr.exception.TxtOprException;
 public class FileOprUtils {
 	private static final String ENCODE_UTF8 = "utf-8";
 	private static final String NEW_LINE = "\r\n";
-	private static final String KEY_CTRL_D = "[ctrl+d]";
+	private static final String KEY_CTRL_D = "ctrl+d";
 	public static final int OPR_FIRST = 0x01 << 0;
 	public static final int OPR_SRCH = 0x01 << 1;
 	public static final int OPR_REPLACE = 0x01 << 2;
@@ -61,7 +61,8 @@ public class FileOprUtils {
      * @return
      */
     public static boolean findAndReplaceText(String path, int oprFlag, String src, String tgt) {
-    	boolean flag = false;
+    	boolean result = false;
+    	boolean found = false;
 		try { 
 			File filename = new File(path); // 要读取以上路径的input。txt文件
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename), ENCODE_UTF8); // 建立一个输入流对象reader
@@ -73,15 +74,17 @@ public class FileOprUtils {
 					
 				} else {
 					if (line.contains(src)) {
-						flag = true;
+						found = true;
+						result = true;
 						if ((oprFlag & OPR_REPLACE) == OPR_REPLACE && !KEY_CTRL_D.equalsIgnoreCase(tgt)) {
 							line = line.replace(src, tgt);
 						}
 					}
 				}
-				if (!(flag && KEY_CTRL_D.equalsIgnoreCase(tgt))) {
+				if (!(found && KEY_CTRL_D.equalsIgnoreCase(tgt))) {
 					sb.append(line).append(NEW_LINE);
 				}
+				found = false;
 			}
 			
 			try {
@@ -90,7 +93,7 @@ public class FileOprUtils {
 				//TODO
 			}
 			
-			if (flag && (oprFlag & OPR_REPLACE) == OPR_REPLACE) {	//找到，并且是替换操作
+			if (result && (oprFlag & OPR_REPLACE) == OPR_REPLACE) {	//找到，并且是替换操作
 				File writename = new File(path);
 				writename.createNewFile(); // 创建新文件
 				BufferedWriter out = new BufferedWriter(new FileWriter(writename));
@@ -103,7 +106,7 @@ public class FileOprUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return flag;
+		return result;
 	}
     
 	public static void deleteFile(String delpath) throws IOException {
